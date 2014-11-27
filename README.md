@@ -5,7 +5,7 @@ williamyeh.fluentd for Ansible Galaxy
 
 ## Summary
 
-Role name in Ansible Galaxy: **[williamyeh.fluentd](https://galaxy.ansible.com/list#/roles/XXXX)**
+Role name in Ansible Galaxy: **[williamyeh.fluentd](https://galaxy.ansible.com/list#/roles/2269)**
 
 This Ansible role has the following features for [Fluentd](http://www.fluentd.org/):
 

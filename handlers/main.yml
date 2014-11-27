@@ -1,0 +1,11 @@
+---
+# file: handlers/main.yml
+#
+
+- name: restart td-agent
+  sudo: True
+  service: name=td-agent state=restarted
+
+- name: stop td-agent
+  sudo: True
+  service: name=td-agent state=stopped

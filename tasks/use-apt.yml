@@ -1,0 +1,50 @@
+---
+# file: tasks/use-apt.yml
+#
+# Configure td-agent from APT repository.  
+#
+# @see http://docs.fluentd.org/articles/install-by-deb
+# @see http://toolbelt.treasuredata.com/sh/install-ubuntu-trusty-td-agent2.sh
+#
+
+- name: install add-apt-repository binary for Ansible to work
+  sudo: True
+  apt: name=python-software-properties state=present update_cache=yes
+
+- name: add APT signing key for td-agent
+  sudo: True
+  apt_key: url=http://packages.treasuredata.com/GPG-KEY-td-agent state=present
+
+- name: add td-agent repository
+  sudo: True
+  apt_repository: repo='deb http://packages.treasuredata.com/2/ubuntu/trusty/ trusty contrib' state=present
+  when: ansible_os_family == "Debian" and ansible_distribution_release == "trusty"
+
+- name: add td-agent repository
+  sudo: True
+  apt_repository: repo='deb http://packages.treasuredata.com/2/ubuntu/precise/ precise contrib' state=present
+  when: ansible_os_family == "Debian" and ansible_distribution_release == "precise"
+
+- name: add td-agent repository
+  sudo: True
+  apt_repository: repo='deb http://packages.treasuredata.com/2/debian/wheezy/ wheezy contrib' state=present
+  when: ansible_os_family == "Debian" and ansible_distribution_release == "wheezy"
+
+
+
+
+- name: install td-agent
+  sudo: True
+  apt: name=td-agent  update_cache=yes  state=present force=yes
+
+
+
+
+- name: install libcurl for compiling plugins
+  sudo: True
+  apt: name=libcurl4-gnutls-dev state=present update_cache=yes
+
+
+- name: set INIT status (SysV style)
+  sudo: True
+  shell: update-rc.d td-agent defaults

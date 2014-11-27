@@ -1,0 +1,37 @@
+---
+# file: tasks/main.yml
+# Top-level installer for Fluentd.
+#
+# @see http://docs.treasuredata.com/articles/td-agent
+#
+
+- name: delegate to APT system for installation
+  include: use-apt.yml
+  when: ansible_pkg_mgr == "apt"
+
+- name: delegate to YUM system for installation
+  include: use-yum.yml
+  when: ansible_pkg_mgr == "yum"
+
+
+
+- name: reanme default td-agent.conf
+  sudo: True
+  command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
+
+- name: copy new td-agent.conf
+  sudo: True
+  copy: src=../files/td-agent.conf dest=/etc/td-agent/td-agent.conf
+  notify:
+    - restart td-agent
+
+
+
+- name: install plugins, if any
+  command: >
+      /opt/td-agent/embedded/bin/fluent-gem install
+      {{ item }}
+      --no-rdoc --no-ri
+  with_items: tdagent_plugins
+  notify:
+    - restart td-agent

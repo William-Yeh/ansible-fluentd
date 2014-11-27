@@ -1,0 +1,28 @@
+---
+# meta/main.yml
+
+galaxy_info:
+    author: williamyeh
+    description: Install Fluentd (td-agent version)
+    license: Apache
+    min_ansible_version: 1.8
+
+    platforms:
+
+        - name: Ubuntu
+          versions:
+              - precise
+              - trusty
+
+        - name: Debian
+          versions:
+              - wheezy
+
+        - name: EL
+          versions:
+              - 6
+
+    categories:
+        - system
+
+dependencies: []

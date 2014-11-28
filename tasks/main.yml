@@ -26,12 +26,18 @@
     - restart td-agent
 
 
-
+# GEM installed on:
+#   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
 - name: install plugins, if any
-  command: >
-      /opt/td-agent/embedded/bin/fluent-gem install
-      {{ item }}
-      --no-rdoc --no-ri
+  gem: >
+      name={{ item }}  
+      executable=/opt/td-agent/embedded/bin/fluent-gem 
+      state=latest
+      user_install=no
+  #command: >
+  #    /opt/td-agent/embedded/bin/fluent-gem install
+  #    {{ item }}
+  #    --no-rdoc --no-ri
   with_items: tdagent_plugins
   notify:
     - restart td-agent

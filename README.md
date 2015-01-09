@@ -29,6 +29,9 @@ User-configurable defaults:
 ```yaml
 # an array of plugins to be installed
 tdagent_plugins
+
+# conf file (usually td-agent.conf) to be installed, relative to `playbook_dir`
+tdagent_conf_copy
 ```
 
 
@@ -86,11 +89,7 @@ More practical example:
       - fluent-plugin-elasticsearch
       - fluent-plugin-kafka
 
-  tasks:
-    - name: Copy project-specific config file for Fluentd 
-      template: src=templates/td-agent.conf.j2  dest=/etc/td-agent/td-agent.conf
-      notify:
-        - restart td-agent
+    tdagent_conf_copy: "files/td-agent.conf"
 ```
 
 

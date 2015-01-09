@@ -19,11 +19,22 @@
   sudo: True
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
 
-- name: copy new td-agent.conf
+
+
+- name: copy new td-agent.conf from role's default
   sudo: True
-  copy: src=../files/td-agent.conf dest=/etc/td-agent/td-agent.conf
+  copy: src=../files/td-agent.conf  dest=/etc/td-agent/td-agent.conf
+  when: tdagent_conf_copy is not defined
   notify:
     - restart td-agent
+
+- name: copy new td-agent.conf from main playbook's
+  sudo: True
+  copy: src={{ playbook_dir }}/{{ tdagent_conf_copy }}  dest=/etc/td-agent/td-agent.conf
+  when: tdagent_conf_copy is defined
+  notify:
+    - restart td-agent
+
 
 
 # GEM installed on:

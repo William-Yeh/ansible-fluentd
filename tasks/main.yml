@@ -24,14 +24,21 @@
 - name: copy new td-agent.conf from role's default
   sudo: True
   copy: src=../files/td-agent.conf  dest=/etc/td-agent/td-agent.conf
-  when: tdagent_conf_copy is not defined
+  when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
   notify:
     - restart td-agent
 
-- name: copy new td-agent.conf from main playbook's
+- name: copy new "td-agent.conf" verbatim from main playbook's
   sudo: True
   copy: src={{ playbook_dir }}/{{ tdagent_conf_copy }}  dest=/etc/td-agent/td-agent.conf
   when: tdagent_conf_copy is defined
+  notify:
+    - restart td-agent
+
+- name: copy (from template) new "td-agent.conf" from main playbook's
+  sudo: True
+  template: src={{ playbook_dir }}/{{ tdagent_conf_template }}  dest=/etc/td-agent/td-agent.conf
+  when: tdagent_conf_template is defined
   notify:
     - restart td-agent
 

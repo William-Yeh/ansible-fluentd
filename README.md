@@ -30,8 +30,15 @@ User-configurable defaults:
 # an array of plugins to be installed
 tdagent_plugins
 
-# conf file (usually td-agent.conf) to be installed, relative to `playbook_dir`
+# conf file (usually td-agent.conf) to be installed,
+# relative to `playbook_dir`;
+# the file will be copied verbatim
 tdagent_conf_copy
+
+# conf file (usually td-agent.conf.j2) to be installed,
+# relative to `playbook_dir`;
+# the file will be copied through Ansible's template system
+tdagent_conf_template
 ```
 
 
@@ -89,7 +96,11 @@ More practical example:
       - fluent-plugin-elasticsearch
       - fluent-plugin-kafka
 
+    # copy verbatim
     tdagent_conf_copy: "files/td-agent.conf"
+
+    # copy through Ansible's template system
+    tdagent_conf_template: "templates/td-agent.conf.j2"
 ```
 
 

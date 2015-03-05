@@ -47,6 +47,7 @@
 # GEM installed on:
 #   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
 - name: install plugins, if any
+  sudo: True
   gem: >
       name={{ item }}  
       executable=/opt/td-agent/embedded/bin/fluent-gem 

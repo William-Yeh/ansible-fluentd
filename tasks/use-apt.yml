@@ -40,9 +40,12 @@
 
 
 
-- name: install libcurl for compiling plugins
+- name: install libcurl and make for compiling plugins
   sudo: True
-  apt: name=libcurl4-gnutls-dev state=present update_cache=yes
+  apt: name={{ item }}  state=present update_cache=yes
+  with_items:
+    - libcurl4-gnutls-dev
+    - build-essential
 
 
 - name: set INIT status (SysV style)

@@ -1,0 +1,15 @@
+- hosts: all
+  tasks:
+    - include: 'tasks/main.yml'
+  handlers:
+    - include: 'handlers/main.yml'
+  vars_files:
+    - 'defaults/main.yml'
+
+  vars:
+    tdagent_plugins:
+      - fluent-plugin-watch-process
+      - fluent-plugin-multiprocess
+      - fluent-plugin-docker-metrics
+      - fluent-plugin-elasticsearch
+      - fluent-plugin-kafka

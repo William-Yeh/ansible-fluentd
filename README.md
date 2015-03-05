@@ -60,7 +60,7 @@ tdagent_conf_template
 Add role name `williamyeh.fluentd` to your playbook file.
 
 
-### Step 2: add variables
+### Step 2: add variables, if any
 
 Set vars in your playbook file.
 
@@ -74,6 +74,12 @@ Simple example:
 
   roles:
     - williamyeh.fluentd
+
+  vars:
+    tdagent_plugins:
+      - fluent-plugin-watch-process
+      - fluent-plugin-multiprocess
+      - fluent-plugin-elasticsearch
 ```
 
 
@@ -93,8 +99,9 @@ More practical example:
 
   vars:
     tdagent_plugins:
+      - fluent-plugin-watch-process
+      - fluent-plugin-multiprocess
       - fluent-plugin-elasticsearch
-      - fluent-plugin-kafka
 
     # copy verbatim
     tdagent_conf_copy: "files/td-agent.conf"

@@ -5,6 +5,10 @@
 # @see http://docs.treasuredata.com/articles/td-agent
 #
 
+- name: set role variables, if necessary
+  include: set-role-variables.yml
+
+
 - name: delegate to APT system for installation
   include: use-apt.yml
   when: ansible_pkg_mgr == "apt"
@@ -16,27 +20,23 @@
 
 
 - name: reanme default td-agent.conf
-  sudo: True
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
 
 
 
 - name: copy new td-agent.conf from role's default
-  sudo: True
   copy: src=../files/td-agent.conf  dest=/etc/td-agent/td-agent.conf
   when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
   notify:
     - restart td-agent
 
 - name: copy new "td-agent.conf" verbatim from main playbook's
-  sudo: True
   copy: src={{ playbook_dir }}/{{ tdagent_conf_copy }}  dest=/etc/td-agent/td-agent.conf
   when: tdagent_conf_copy is defined
   notify:
     - restart td-agent
 
 - name: copy (from template) new "td-agent.conf" from main playbook's
-  sudo: True
   template: src={{ playbook_dir }}/{{ tdagent_conf_template }}  dest=/etc/td-agent/td-agent.conf
   when: tdagent_conf_template is defined
   notify:
@@ -47,10 +47,9 @@
 # GEM installed on:
 #   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
 - name: install plugins, if any
-  sudo: True
   gem: >
-      name={{ item }}  
-      executable=/opt/td-agent/embedded/bin/fluent-gem 
+      name={{ item }}
+      executable=/opt/td-agent/embedded/bin/fluent-gem
       state=latest
       user_install=no
   #command: >

@@ -1,40 +1,31 @@
 ---
 # file: tasks/use-yum.yml
 #
-# Configure td-agent from YUM repository.  
+# Configure td-agent from YUM repository.
 #
 # @see http://docs.fluentd.org/articles/install-by-rpm
 # @see http://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh
 #
 
 
-- name: install libselinux-python binary for Ansible to work 
-  sudo: True
+- name: install libselinux-python binary for Ansible to work
   yum: name=libselinux-python state=present
 
 
-- name: download installer script
-  get_url: url=http://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh  dest=/tmp/install.sh
 
-- name: add executable permission to installer
-  file: path=/tmp/install.sh  mode="a+x"
+- name: add GPG key from Treasure Data, Inc
+  command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+#  rpm_key: key=https://packages.treasuredata.com/GPG-KEY-td-agent validate_certs=no state=present
 
-- name: remove "sudo" in the installer script
-  lineinfile: dest=/tmp/install.sh  regexp="^sudo -k"  line="#sudo -k"
+- name: add official repository
+  copy: src=../files/td.repo dest=/etc/yum.repos.d/td.repo
 
-- name: remove "sudo" in the installer script
-  lineinfile: dest=/tmp/install.sh  regexp="^sudo sh(.+)"  line="sh\1"  backrefs=yes
-
-- name: install
-  sudo: True
-  shell: /tmp/install.sh
-
-
+- name: install td-agent
+  yum: name=td-agent  update_cache=yes  state=present
 
 
 
 - name: install gcc and libcurlXXX for compiling plugins
-  sudo: True
   yum: name={{ item }} state=present
   with_items:
     - gcc
@@ -42,7 +33,14 @@
     - libcurl-devel
 
 
+- name: set INIT status and start
+  service: name=td-agent state=started enabled=yes
+  when: tdagent_use_service|bool
+
 - name: set INIT status (SysV style)
-  sudo: True
-  action: shell chkconfig --add td-agent
-  action: shell chkconfig --level 345 td-agent on
+  command: /sbin/chkconfig td-agent on
+  when: not tdagent_use_service|bool
+
+#- name: set INIT status (SysV style)
+#  action: shell chkconfig --add td-agent
+#  action: shell chkconfig --level 345 td-agent on

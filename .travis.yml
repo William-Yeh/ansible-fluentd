@@ -1,0 +1,21 @@
+sudo: true
+
+install:
+  - curl -sLo - http://j.mp/install-travis-docker | sh -xe
+
+script:
+  - echo "==> Building the main Docker image..."
+  - ./run 'docker build -f test/Dockerfile-ubuntu14.04 -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-ubuntu14.04  http://fluentd:24220/api/plugins.json'
+  - ./run 'docker build -f test/Dockerfile-ubuntu12.04 -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-ubuntu12.04  http://fluentd:24220/api/plugins.json'
+  #- ./run 'docker build -f test/Dockerfile-debian8     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-debian8      http://fluentd:24220/api/plugins.json'
+  - ./run 'docker build -f test/Dockerfile-debian7     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-debian7      http://fluentd:24220/api/plugins.json'
+  - ./run 'docker build -f test/Dockerfile-centos7     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-centos7      http://fluentd:24220/api/plugins.json'
+  - ./run 'docker build -f test/Dockerfile-centos6     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-centos6      http://fluentd:24220/api/plugins.json'
+
+  - echo "==> Validating the test results..."
+  - grep 'monitor_agent' result-ubuntu14.04  ||  exit 1
+  - grep 'monitor_agent' result-ubuntu12.04  ||  exit 1
+  #- grep 'monitor_agent' result-debian8      ||  exit 1
+  - grep 'monitor_agent' result-debian7      ||  exit 1
+  - grep 'monitor_agent' result-centos7      ||  exit 1
+  - grep 'monitor_agent' result-centos6      ||  exit 1

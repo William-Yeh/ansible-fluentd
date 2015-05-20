@@ -2,6 +2,8 @@
 williamyeh.fluentd for Ansible Galaxy
 ============
 
+[![Build Status](https://travis-ci.org/William-Yeh/ansible-fluentd.svg?branch=master)](https://travis-ci.org/William-Yeh/ansible-fluentd)
+
 
 ## Summary
 

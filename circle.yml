@@ -29,27 +29,27 @@ test:
   override:
     - docker run -d -p 24220:24220 --name c1 fluentd_trusty
     - curl -v -o result-ubuntu14.04  http://localhost:24220/api/plugins.json
-    - docker kill c1
+    - docker kill c1 ; sleep 10
 
     - docker run -d -p 24220:24220 --name c2 fluentd_precise
     - curl -v -o result-ubuntu12.04  http://localhost:24220/api/plugins.json
-    - docker kill c2
+    - docker kill c2 ; sleep 10
 
     #- docker run -d -p 24220:24220 --name c3 fluentd_jessie
     #- curl -v -o result-debian8      http://localhost:24220/api/plugins.json
-    #- docker kill c3
+    #- docker kill c3 ; sleep 10
 
     - docker run -d -p 24220:24220 --name c4 fluentd_wheezy
     - curl -v -o result-debian7      http://localhost:24220/api/plugins.json
-    - docker kill c4
+    - docker kill c4 ; sleep 10
 
     - docker run -d -p 24220:24220 --name c5 fluentd_centos7
     - curl -v -o result-centos7      http://localhost:24220/api/plugins.json
-    - docker kill c5
+    - docker kill c5 ; sleep 10
 
     - docker run -d -p 24220:24220 --name c6 fluentd_centos6
     - curl -v -o result-centos6      http://localhost:24220/api/plugins.json
-    - docker kill c6
+    - docker kill c6 ; sleep 10
 
     - echo "==> Validating the test results..."
     - grep 'monitor_agent' result-ubuntu14.04

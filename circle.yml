@@ -1,0 +1,56 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker version
+
+    - cp test/Dockerfile-ubuntu14.04 Dockerfile
+    - docker build  -t fluentd_trusty   .
+
+    - cp test/Dockerfile-ubuntu12.04 Dockerfile
+    - docker build  -t fluentd_precise  .
+
+    #- cp test/Dockerfile-debian8 Dockerfile
+    #- docker build  -t fluentd_jessie   .
+
+    - cp test/Dockerfile-debian7 Dockerfile
+    - docker build  -t fluentd_wheezy   .
+
+    - cp test/Dockerfile-centos7 Dockerfile
+    - docker build  -t fluentd_centos7  .
+
+    - cp test/Dockerfile-centos6 Dockerfile
+    - docker build  -t fluentd_centos6  .
+
+test:
+  override:
+    - docker run -d --name fluentd -p 24220:24220 fluentd_trusty
+    - curl -v -o result-ubuntu14.04  http://localhost:24220/api/plugins.json
+    - docker kill fluentd ; docker rm -f fluentd
+
+    - docker run -d --name fluentd -p 24220:24220 fluentd_precise
+    - curl -v -o result-ubuntu12.04  http://localhost:24220/api/plugins.json
+    - docker kill fluentd ; docker rm -f fluentd
+
+    - docker run -d --name fluentd -p 24220:24220 fluentd_wheezy
+    - curl -v -o result-debian7      http://localhost:24220/api/plugins.json
+    - docker kill fluentd ; docker rm -f fluentd
+
+    - docker run -d --name fluentd -p 24220:24220 fluentd_centos7
+    - curl -v -o result-centos7      http://localhost:24220/api/plugins.json
+    - docker kill fluentd ; docker rm -f fluentd
+
+    - docker run -d --name fluentd -p 24220:24220 fluentd_centos6
+    - curl -v -o result-centos6      http://localhost:24220/api/plugins.json
+    - docker kill fluentd ; docker rm -f fluentd
+
+    - echo "==> Validating the test results..."
+    - grep 'monitor_agent' result-ubuntu14.04
+    - grep 'monitor_agent' result-ubuntu12.04
+    #- grep 'monitor_agent' result-debian8
+    - grep 'monitor_agent' result-debian7
+    - grep 'monitor_agent' result-centos7
+    - grep 'monitor_agent' result-centos6

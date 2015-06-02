@@ -27,25 +27,25 @@ dependencies:
 
 test:
   override:
-    - docker run -d --name fluentd -p 24220:24220 fluentd_trusty
+    - ID=$(docker run -d -p 24220:24220 fluentd_trusty)
     - curl -v -o result-ubuntu14.04  http://localhost:24220/api/plugins.json
-    - docker kill fluentd ; docker rm -f fluentd
+    - docker kill $ID
 
-    - docker run -d --name fluentd -p 24220:24220 fluentd_precise
+    - ID=$(docker run -d -p 24220:24220 fluentd_precise)
     - curl -v -o result-ubuntu12.04  http://localhost:24220/api/plugins.json
-    - docker kill fluentd ; docker rm -f fluentd
+    - docker kill $ID
 
-    - docker run -d --name fluentd -p 24220:24220 fluentd_wheezy
+    - ID=$(docker run -d -p 24220:24220 fluentd_wheezy)
     - curl -v -o result-debian7      http://localhost:24220/api/plugins.json
-    - docker kill fluentd ; docker rm -f fluentd
+    - docker kill $ID
 
-    - docker run -d --name fluentd -p 24220:24220 fluentd_centos7
+    - ID=$(docker run -d -p 24220:24220 fluentd_centos7)
     - curl -v -o result-centos7      http://localhost:24220/api/plugins.json
-    - docker kill fluentd ; docker rm -f fluentd
+    - docker kill $ID
 
-    - docker run -d --name fluentd -p 24220:24220 fluentd_centos6
+    - ID=$(docker run -d -p 24220:24220 fluentd_centos6)
     - curl -v -o result-centos6      http://localhost:24220/api/plugins.json
-    - docker kill fluentd ; docker rm -f fluentd
+    - docker kill $ID
 
     - echo "==> Validating the test results..."
     - grep 'monitor_agent' result-ubuntu14.04

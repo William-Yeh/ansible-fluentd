@@ -14,7 +14,6 @@
 tdagent_plugins:
     - fluent-plugin-watch-process
     - fluent-plugin-multiprocess
-    - fluent-plugin-docker-metrics
     - fluent-plugin-elasticsearch
 
 

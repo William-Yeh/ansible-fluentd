@@ -16,29 +16,30 @@ dependencies:
 
 test:
   override:
-    - docker run -d -p 24220:24220 --name c1 fluentd_trusty
-    - curl -v -o result-ubuntu14.04  http://localhost:24220/api/plugins.json
-    - docker kill c1 ; sleep 10
+    - docker run -d --name c1 fluentd_trusty
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c1)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu14.04
 
-    - docker run -d -p 24220:24220 --name c2 fluentd_precise
-    - curl -v -o result-ubuntu12.04  http://localhost:24220/api/plugins.json
-    - docker kill c2 ; sleep 10
+    - docker run -d --name c2 fluentd_precise
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c2)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu12.04
 
-    #- docker run -d -p 24220:24220 --name c3 fluentd_jessie
-    #- curl -v -o result-debian8      http://localhost:24220/api/plugins.json
-    #- docker kill c3 ; sleep 10
+    #- docker run -d --name c3 fluentd_jessie
+    #- IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c3)  ;  echo http://$IP:24220/api/plugins.json > url
+    #- cat url  |  xargs -t -n 1 curl -v -o result-debian8
 
-    - docker run -d -p 24220:24220 --name c4 fluentd_wheezy
-    - curl -v -o result-debian7      http://localhost:24220/api/plugins.json
-    - docker kill c4 ; sleep 10
+    - docker run -d --name c4 fluentd_wheezy
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c4)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-debian7
 
-    - docker run -d -p 24220:24220 --name c5 fluentd_centos7
-    - curl -v -o result-centos7      http://localhost:24220/api/plugins.json
-    - docker kill c5 ; sleep 10
+    - docker run -d --name c5 fluentd_centos7
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c5)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-centos7
 
-    - docker run -d -p 24220:24220 --name c6 fluentd_centos6
-    - curl -v -o result-centos6      http://localhost:24220/api/plugins.json
-    - docker kill c6 ; sleep 10
+    - docker run -d --name c6 fluentd_centos6
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c6)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-centos6
+
 
     - echo "==> Validating the test results..."
     - grep 'monitor_agent' result-ubuntu14.04

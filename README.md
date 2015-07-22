@@ -121,7 +121,7 @@ None.
 
 ## License
 
-Licensed under the Apache License V2.0. See the [LICENSE file](LICENSE) for details.
+Licensed under the MIT License. See the [LICENSE file](LICENSE) for details.
 
 
 ## History

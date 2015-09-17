@@ -14,29 +14,29 @@ before_install:
     - docker build  -f test/Dockerfile-centos6      -t fluentd_centos6  .
 
 script:
-    - docker run -d --name c1 fluentd_trusty
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c1)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu14.04
+    - PORT=1000
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_trusty
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu14.04
 
-    - docker run -d --name c2 fluentd_precise
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c2)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu12.04
+    - PORT=1001
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_precise
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu12.04
 
-    - docker run -d --name c3 fluentd_jessie
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c3)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-debian8
+    - PORT=1002
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_jessie
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian8
 
-    - docker run -d --name c4 fluentd_wheezy
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c4)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-debian7
+    - PORT=1003
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_wheezy
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian7
 
-    - docker run -d --name c5 fluentd_centos7
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c5)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-centos7
+    - PORT=1004
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos7
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos7
 
-    - docker run -d --name c6 fluentd_centos6
-    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c6)  ;  echo http://$IP:24220/api/plugins.json > url
-    - cat url  |  xargs -t -n 1 curl -v -o result-centos6
+    - PORT=1005
+    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos6
+    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos6
 
 
     - echo "==> Validating the test results..."

@@ -16,27 +16,27 @@ before_install:
 script:
     - PORT=1000
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_trusty
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu14.04
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu14.04
 
     - PORT=1001
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_precise
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu12.04
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu12.04
 
     - PORT=1002
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_jessie
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian8
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian8
 
     - PORT=1003
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_wheezy
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian7
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian7
 
     - PORT=1004
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos7
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos7
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos7
 
     - PORT=1005
     - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos6
-    - curl http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos6
+    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos6
 
 
     - echo "==> Validating the test results..."

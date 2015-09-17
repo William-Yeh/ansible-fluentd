@@ -12,9 +12,10 @@
 #
 
 tdagent_plugins:
-    - fluent-plugin-watch-process
     - fluent-plugin-multiprocess
-    - fluent-plugin-elasticsearch
+    #- fluent-plugin-elasticsearch
+    #- fluent-plugin-prometheus
+
 
 
 #---- the following vars are handled in tasks/set-role-variables.yml ------

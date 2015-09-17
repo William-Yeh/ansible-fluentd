@@ -3,7 +3,7 @@ williamyeh.fluentd for Ansible Galaxy
 ============
 
 
-[![Circle CI](https://circleci.com/gh/William-Yeh/ansible-fluentd.svg?style=shield)](https://circleci.com/gh/William-Yeh/ansible-fluentd)
+[![Circle CI](https://circleci.com/gh/William-Yeh/ansible-fluentd.svg?style=shield)](https://circleci.com/gh/William-Yeh/ansible-fluentd) [![Build Status](https://travis-ci.org/William-Yeh/ansible-fluentd.svg?branch=master)](https://travis-ci.org/William-Yeh/ansible-fluentd)
 
 
 ## Summary
@@ -80,7 +80,6 @@ Simple example:
 
   vars:
     tdagent_plugins:
-      - fluent-plugin-watch-process
       - fluent-plugin-multiprocess
       - fluent-plugin-elasticsearch
 ```
@@ -102,7 +101,6 @@ More practical example:
 
   vars:
     tdagent_plugins:
-      - fluent-plugin-watch-process
       - fluent-plugin-multiprocess
       - fluent-plugin-elasticsearch
 

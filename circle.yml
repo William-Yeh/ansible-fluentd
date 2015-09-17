@@ -9,7 +9,7 @@ dependencies:
 
     - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_trusty   .
     - docker build  -f test/Dockerfile-ubuntu12.04  -t fluentd_precise  .
-    ###- docker build  -f test/Dockerfile-debian8      -t fluentd_jessie   .
+    - docker build  -f test/Dockerfile-debian8      -t fluentd_jessie   .
     - docker build  -f test/Dockerfile-debian7      -t fluentd_wheezy   .
     - docker build  -f test/Dockerfile-centos7      -t fluentd_centos7  .
     - docker build  -f test/Dockerfile-centos6      -t fluentd_centos6  .
@@ -24,9 +24,9 @@ test:
     - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c2)  ;  echo http://$IP:24220/api/plugins.json > url
     - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu12.04
 
-    #- docker run -d --name c3 fluentd_jessie
-    #- IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c3)  ;  echo http://$IP:24220/api/plugins.json > url
-    #- cat url  |  xargs -t -n 1 curl -v -o result-debian8
+    - docker run -d --name c3 fluentd_jessie
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c3)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-debian8
 
     - docker run -d --name c4 fluentd_wheezy
     - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c4)  ;  echo http://$IP:24220/api/plugins.json > url
@@ -44,7 +44,7 @@ test:
     - echo "==> Validating the test results..."
     - grep 'monitor_agent' result-ubuntu14.04
     - grep 'monitor_agent' result-ubuntu12.04
-    #- grep 'monitor_agent' result-debian8
+    - grep 'monitor_agent' result-debian8
     - grep 'monitor_agent' result-debian7
     - grep 'monitor_agent' result-centos7
     - grep 'monitor_agent' result-centos6

@@ -1,21 +1,48 @@
 sudo: true
+services:
+    - docker
 
-install:
-  - curl -sLo - http://j.mp/install-travis-docker | sh -xe
+before_install:
+    - docker info
+    - docker version
+
+    - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_trusty   .
+    - docker build  -f test/Dockerfile-ubuntu12.04  -t fluentd_precise  .
+    - docker build  -f test/Dockerfile-debian8      -t fluentd_jessie   .
+    - docker build  -f test/Dockerfile-debian7      -t fluentd_wheezy   .
+    - docker build  -f test/Dockerfile-centos7      -t fluentd_centos7  .
+    - docker build  -f test/Dockerfile-centos6      -t fluentd_centos6  .
 
 script:
-  - echo "==> Building the main Docker image..."
-  - ./run 'docker build -f test/Dockerfile-ubuntu14.04 -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-ubuntu14.04  http://fluentd:24220/api/plugins.json'
-  - ./run 'docker build -f test/Dockerfile-ubuntu12.04 -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-ubuntu12.04  http://fluentd:24220/api/plugins.json'
-  #- ./run 'docker build -f test/Dockerfile-debian8     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-debian8      http://fluentd:24220/api/plugins.json'
-  - ./run 'docker build -f test/Dockerfile-debian7     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-debian7      http://fluentd:24220/api/plugins.json'
-  - ./run 'docker build -f test/Dockerfile-centos7     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-centos7      http://fluentd:24220/api/plugins.json'
-  - ./run 'docker build -f test/Dockerfile-centos6     -t img .  &&  docker run -d --name fluentd img  &&  docker run --link fluentd:fluentd -v $(pwd):/data img curl -v -o /data/result-centos6      http://fluentd:24220/api/plugins.json'
+    - docker run -d --name c1 fluentd_trusty
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c1)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu14.04
 
-  - echo "==> Validating the test results..."
-  - grep 'monitor_agent' result-ubuntu14.04  ||  exit 1
-  - grep 'monitor_agent' result-ubuntu12.04  ||  exit 1
-  #- grep 'monitor_agent' result-debian8      ||  exit 1
-  - grep 'monitor_agent' result-debian7      ||  exit 1
-  - grep 'monitor_agent' result-centos7      ||  exit 1
-  - grep 'monitor_agent' result-centos6      ||  exit 1
+    - docker run -d --name c2 fluentd_precise
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c2)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-ubuntu12.04
+
+    - docker run -d --name c3 fluentd_jessie
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c3)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-debian8
+
+    - docker run -d --name c4 fluentd_wheezy
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c4)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-debian7
+
+    - docker run -d --name c5 fluentd_centos7
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c5)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-centos7
+
+    - docker run -d --name c6 fluentd_centos6
+    - IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' c6)  ;  echo http://$IP:24220/api/plugins.json > url
+    - cat url  |  xargs -t -n 1 curl -v -o result-centos6
+
+
+    - echo "==> Validating the test results..."
+    - grep 'monitor_agent' result-ubuntu14.04
+    - grep 'monitor_agent' result-ubuntu12.04
+    - grep 'monitor_agent' result-debian8
+    - grep 'monitor_agent' result-debian7
+    - grep 'monitor_agent' result-centos7
+    - grep 'monitor_agent' result-centos6

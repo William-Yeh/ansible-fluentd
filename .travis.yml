@@ -14,30 +14,12 @@ before_install:
     - docker build  -f test/Dockerfile-centos6      -t fluentd_centos6  .
 
 script:
-    - PORT=1000
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_trusty
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu14.04
-
-    - PORT=1001
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_precise
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-ubuntu12.04
-
-    - PORT=1002
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_jessie
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian8
-
-    - PORT=1003
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_wheezy
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-debian7
-
-    - PORT=1004
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos7
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos7
-
-    - PORT=1005
-    - docker run -d -p 127.0.0.1:$PORT:24220  fluentd_centos6
-    - curl --retry 5 --retry-max-time 120  http://127.0.0.1:$PORT/api/plugins.json -v -o result-centos6
-
+    - docker run  -v $(pwd):/data  fluentd_trusty
+    - docker run  -v $(pwd):/data  fluentd_precise
+    - docker run  -v $(pwd):/data  fluentd_jessie
+    - docker run  -v $(pwd):/data  fluentd_wheezy
+    - docker run  -v $(pwd):/data  fluentd_centos7
+    - docker run  -v $(pwd):/data  fluentd_centos6
 
     - echo "==> Validating the test results..."
     - grep 'monitor_agent' result-ubuntu14.04

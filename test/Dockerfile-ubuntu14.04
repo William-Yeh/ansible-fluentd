@@ -34,4 +34,7 @@ RUN echo "===> Installing curl for testing purpose..."  && \
     apt-get install -y -f curl
 
 
-CMD [ "/opt/td-agent/embedded/bin/ruby", "/usr/sbin/td-agent", "--use-v1-config" ]
+VOLUME ["/data"]
+ENV    RESULT     /data/result-ubuntu14.04
+
+CMD  service td-agent start  &&  sleep 10  &&  curl --retry 5 --retry-max-time 120  http://localhost:24220/api/plugins.json  > $RESULT

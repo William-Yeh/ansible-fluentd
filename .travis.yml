@@ -28,3 +28,6 @@ script:
     - grep 'monitor_agent' result-debian7
     - grep 'monitor_agent' result-centos7
     - grep 'monitor_agent' result-centos6
+
+notifications:
+    webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -56,6 +56,6 @@
   #    /opt/td-agent/embedded/bin/fluent-gem install
   #    {{ item }}
   #    --no-rdoc --no-ri
-  with_items: tdagent_plugins
+  with_items: "{{ tdagent_plugins }}"
   notify:
     - restart td-agent

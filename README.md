@@ -8,11 +8,11 @@ williamyeh.fluentd for Ansible Galaxy
 
 ## Summary
 
-Role name in Ansible Galaxy: **[williamyeh.fluentd](https://galaxy.ansible.com/list#/roles/2269)**
+Role name in Ansible Galaxy: **[williamyeh.fluentd](https://galaxy.ansible.com/williamyeh/fluentd/)**
 
 This Ansible role has the following features for [Fluentd](http://www.fluentd.org/):
 
- - Install td-agent: the stable distribution of Fluentd.
+ - Install [td-agent](https://docs.treasuredata.com/articles/td-agent): the stable Fluentd distribution package maintained by [Treasure Data, Inc](https://www.treasuredata.com/).
  - Install several plugins.
  - Bare bone configuration (*real* configuration should be left to user's template files; see **Usage** section below).
 

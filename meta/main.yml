@@ -24,7 +24,10 @@ galaxy_info:
               - 6
               - 7
 
-    categories:
+    galaxy_tags:
         - system
+        - logging
+        - fluentd
+        - monitoring
 
 dependencies: []

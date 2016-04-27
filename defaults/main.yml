@@ -13,8 +13,9 @@
 
 tdagent_plugins:
     - fluent-plugin-multiprocess
+    - fluent-plugin-flowcounter
+    - fluent-plugin-prometheus
     #- fluent-plugin-elasticsearch
-    #- fluent-plugin-prometheus
 
 
 

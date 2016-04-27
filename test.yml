@@ -14,5 +14,8 @@
       - fluent-plugin-forest
       - fluent-plugin-record-reformer
       #- fluent-plugin-geoip
-      #- fluent-plugin-prometheus
+      - fluent-plugin-flowcounter
+      - fluent-plugin-prometheus
       #- fluent-plugin-elasticsearch
+
+    tdagent_conf_copy: "files/td-agent-with-prometheus.conf"

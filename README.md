@@ -81,6 +81,7 @@ Simple example:
   vars:
     tdagent_plugins:
       - fluent-plugin-multiprocess
+      - fluent-plugin-flowcounter
       - fluent-plugin-elasticsearch
 ```
 
@@ -102,6 +103,7 @@ More practical example:
   vars:
     tdagent_plugins:
       - fluent-plugin-multiprocess
+      - fluent-plugin-flowcounter
       - fluent-plugin-elasticsearch
 
     # copy verbatim

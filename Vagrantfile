@@ -9,6 +9,11 @@ Vagrant.configure(2) do |config|
         #node.vm.box = "bento/centos-7.2"
         #node.vm.box = "bento/centos-6.7"
 
+        node.vm.network "forwarded_port", guest: 24224, host: 24224
+        node.vm.network "forwarded_port", guest:  9880, host:  9880
+        #node.vm.network "forwarded_port", guest: 24220, host: 24220
+        node.vm.network "forwarded_port", guest: 24231, host: 24231
+
         node.vm.provision "ansible" do |ansible|
             ansible.playbook = "test.yml"
             #ansible.sudo = true

@@ -22,7 +22,11 @@
 
 - name: install td-agent
   yum: name=td-agent  update_cache=yes  state=present
+  when: tdagent_version is not defined
 
+- name: install td-agent
+  yum: name="td-agent-{{ tdagent_version }}*"  update_cache=yes  state=present
+  when: tdagent_version is defined
 
 
 - name: install gcc and libcurlXXX for compiling plugins

@@ -47,15 +47,24 @@
 # GEM installed on:
 #   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
 - name: install plugins, if any
-  gem: >
-      name={{ item }}
-      executable=/opt/td-agent/embedded/bin/fluent-gem
-      state=latest
-      user_install=no
-  #command: >
-  #    /opt/td-agent/embedded/bin/fluent-gem install
-  #    {{ item }}
-  #    --no-rdoc --no-ri
-  with_items: "{{ tdagent_plugins }}"
+  gem:
+      name: "{{ item }}"
+      executable: /opt/td-agent/embedded/bin/fluent-gem
+      state: latest
+      user_install: no
+  with_items: "{{ tdagent_plugins | default([]) }}"
   notify:
     - restart td-agent
+
+
+- name: install plugins with specified versions, if any
+  gem:
+      name: "{{ item.value.name }}"
+      executable: /opt/td-agent/embedded/bin/fluent-gem
+      state: present
+      version: "{{ item.value.version }}"
+      user_install: no
+  with_dict: "{{ tdagent_plugins_versions | default({}) }}"
+  notify:
+    - restart td-agent
+

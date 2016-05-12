@@ -30,9 +30,26 @@ Variables needed to be defined in user's playbook: None.
 User-configurable defaults:
 
 ```yaml
-# an array of plugins to be installed
+# td-agent version; e.g., 2.3.1
+# Will install the default (usually the latest stable) version, if not specified.
+tdagent_version
+
+
+# an array of plugins (with latest versions) to be installed
 tdagent_plugins
 
+# an dict of plugins (with specified versions) to be installed
+# dict fields:
+#   - key: memo for this plugin
+#   - value:
+#     - name:    plugin name
+#     - version: plugin version
+tdagent_plugins_versions
+```
+
+User-installable configuration files:
+
+```yaml
 # conf file (usually td-agent.conf) to be installed,
 # relative to `playbook_dir`;
 # the file will be copied verbatim
@@ -81,8 +98,17 @@ Simple example:
   vars:
     tdagent_plugins:
       - fluent-plugin-multiprocess
-      - fluent-plugin-flowcounter
+      - fluent-plugin-forest
       - fluent-plugin-elasticsearch
+
+    tdagent_plugins_versions:
+      prometheus:
+        name: fluent-plugin-prometheus
+        version: 0.1.2
+      flowcounter:
+        name: fluent-plugin-flowcounter
+        version: 0.4.1
+
 ```
 
 

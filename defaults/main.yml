@@ -11,12 +11,6 @@
 # user-configurable defaults
 #
 
-tdagent_plugins:
-    - fluent-plugin-multiprocess
-    - fluent-plugin-flowcounter
-    - fluent-plugin-prometheus
-    #- fluent-plugin-elasticsearch
-
 
 
 #---- the following vars are handled in tasks/set-role-variables.yml ------

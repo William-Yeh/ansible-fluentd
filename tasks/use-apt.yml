@@ -19,7 +19,11 @@
 
 - name: install td-agent
   apt: name=td-agent  update_cache=yes  state=present force=yes
+  when: tdagent_version is not defined
 
+- name: install td-agent
+  apt: name="td-agent={{ tdagent_version }}*"  update_cache=yes  state=present force=yes
+  when: tdagent_version is defined
 
 
 

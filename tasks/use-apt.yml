@@ -32,6 +32,7 @@
   with_items:
     - libcurl4-gnutls-dev
     - build-essential
+  when: tdagent_plugins is defined or tdagent_plugins_versions is defined
 
 
 

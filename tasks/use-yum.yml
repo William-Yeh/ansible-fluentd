@@ -35,6 +35,7 @@
     - gcc
     - libcurl
     - libcurl-devel
+  when: tdagent_plugins is defined or tdagent_plugins_versions is defined
 
 
 - name: set INIT status and start

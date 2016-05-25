@@ -19,28 +19,59 @@
 
 
 
+
+- name: mkdir for conf.d
+  file:
+    path: /etc/td-agent/conf.d
+    state: directory
+    owner: td-agent
+    group: td-agent
+
 - name: reanme default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
 
 
 
 - name: copy new td-agent.conf from role's default
-  copy: src=../files/td-agent.conf  dest=/etc/td-agent/td-agent.conf
+  copy:
+    src: ../files/td-agent.conf
+    dest: /etc/td-agent/td-agent.conf
+    owner: td-agent
+    group: td-agent
   when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
   notify:
-    - restart td-agent
+    - reload td-agent
 
 - name: copy new "td-agent.conf" verbatim from main playbook's
-  copy: src={{ playbook_dir }}/{{ tdagent_conf_copy }}  dest=/etc/td-agent/td-agent.conf
+  copy:
+    src:  "{{ playbook_dir }}/{{ tdagent_conf_copy }}"
+    dest: /etc/td-agent/td-agent.conf
+    owner: td-agent
+    group: td-agent
   when: tdagent_conf_copy is defined
   notify:
-    - restart td-agent
+    - reload td-agent
 
 - name: copy (from template) new "td-agent.conf" from main playbook's
-  template: src={{ playbook_dir }}/{{ tdagent_conf_template }}  dest=/etc/td-agent/td-agent.conf
+  template:
+    src:  "{{ playbook_dir }}/{{ tdagent_conf_template }}"
+    dest: /etc/td-agent/td-agent.conf
+    owner: td-agent
+    group: td-agent
   when: tdagent_conf_template is defined
   notify:
-    - restart td-agent
+    - reload td-agent
+
+- name: copy other config files from playbook's, if any
+  template:
+    src:  "{{ playbook_dir }}/{{ item.value.src }}"
+    dest: "/etc/td-agent/conf.d/{{ item.value.dest }}"
+    owner: td-agent
+    group: td-agent
+  with_dict: '{{ tdagent_conf_others | default({}) }}'
+  notify:
+    - reload td-agent
+
 
 
 

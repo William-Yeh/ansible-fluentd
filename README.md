@@ -22,7 +22,7 @@ This Ansible role has the following features for [Fluentd](http://www.fluentd.or
 
 ### Mandatory variables
 
-Variables needed to be defined in user's playbook: None.
+None.
 
 
 ### Optional variables
@@ -47,7 +47,7 @@ tdagent_plugins
 tdagent_plugins_versions
 ```
 
-User-installable configuration files:
+User-installable configuration files - main configuration:
 
 ```yaml
 # conf file (usually td-agent.conf) to be installed,
@@ -61,9 +61,23 @@ tdagent_conf_copy
 tdagent_conf_template
 ```
 
+User-installable configuration files - other configurations:
+
+```yaml
+# other conf templates to be installed to "/etc/td-agent/conf.d";
+# dict fields:
+#   - key: memo for this conf
+#   - value:
+#     - src:  template file relative to `playbook_dir`
+#     - dest: target file relative to `/etc/td-agent/conf.d/`
+tdagent_conf_others
+```
+
 
 
 ## Handlers
+
+- `reload td-agent`
 
 - `restart td-agent`
 
@@ -137,6 +151,12 @@ More practical example:
 
     # copy through Ansible's template system
     tdagent_conf_template: "templates/td-agent.conf.j2"
+
+    # other configurations to be copied through Ansible's template system
+    tdagent_conf_others:
+      prometheus_metrics:
+        src:  templates/prometheus.conf.j2
+        dest: prometheus.conf
 ```
 
 

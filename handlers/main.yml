@@ -2,12 +2,14 @@
 # file: handlers/main.yml
 #
 
+- name: reload td-agent
+  service: name=td-agent state=reloaded
+  when: tdagent_use_service|bool
+
 - name: restart td-agent
-  sudo: True
   service: name=td-agent state=restarted
   when: tdagent_use_service|bool
 
 - name: stop td-agent
-  sudo: True
   service: name=td-agent state=stopped
   when: tdagent_use_service|bool

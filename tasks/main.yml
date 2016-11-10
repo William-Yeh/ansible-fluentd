@@ -27,7 +27,7 @@
     owner: td-agent
     group: td-agent
 
-- name: reanme default td-agent.conf
+- name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
 
 

@@ -30,7 +30,7 @@ None.
 User-configurable defaults:
 
 ```yaml
-# td-agent version; e.g., 2.3.1
+# td-agent version; e.g., 2.3.4
 # Will install the default (usually the latest stable) version, if not specified.
 tdagent_version
 

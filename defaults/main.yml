@@ -12,6 +12,8 @@
 #
 
 
+#tdagent_version
+
 
 #---- the following vars are handled in tasks/set-role-variables.yml ------
 

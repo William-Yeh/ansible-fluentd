@@ -7,6 +7,7 @@ dependencies:
     - docker info
     - docker version
 
+    - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_xenial   .
     - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_trusty   .
     - docker build  -f test/Dockerfile-ubuntu12.04  -t fluentd_precise  .
     - docker build  -f test/Dockerfile-debian8      -t fluentd_jessie   .
@@ -16,6 +17,7 @@ dependencies:
 
 test:
   override:
+    - docker run  -v $(pwd):/data  fluentd_xenial
     - docker run  -v $(pwd):/data  fluentd_trusty
     - docker run  -v $(pwd):/data  fluentd_precise
     - docker run  -v $(pwd):/data  fluentd_jessie
@@ -24,6 +26,7 @@ test:
     - docker run  -v $(pwd):/data  fluentd_centos6
 
     - echo "==> Validating the test results..."
+    - grep 'monitor_agent' result-ubuntu16.04
     - grep 'monitor_agent' result-ubuntu14.04
     - grep 'monitor_agent' result-ubuntu12.04
     - grep 'monitor_agent' result-debian8

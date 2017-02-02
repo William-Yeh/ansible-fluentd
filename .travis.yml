@@ -6,7 +6,7 @@ before_install:
     - docker info
     - docker version
 
-    - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_xenial   .
+    - docker build  -f test/Dockerfile-ubuntu16.04  -t fluentd_xenial   .
     - docker build  -f test/Dockerfile-ubuntu14.04  -t fluentd_trusty   .
     - docker build  -f test/Dockerfile-ubuntu12.04  -t fluentd_precise  .
     - docker build  -f test/Dockerfile-debian8      -t fluentd_jessie   .

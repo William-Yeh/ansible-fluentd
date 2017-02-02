@@ -8,7 +8,7 @@
     - 'defaults/main.yml'
 
   vars:
-    #tdagent_versoin: 2.3.1
+    #tdagent_version: 2.3.1
 
     #tdagent_plugins:
     #  - fluent-plugin-multiprocess

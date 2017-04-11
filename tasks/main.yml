@@ -40,7 +40,6 @@
     group: td-agent
   when: >
     ( tdagent_setup_conf )
-    and ( tdagent_setup_conf )
     and ( tdagent_conf_copy is not defined )
     and ( tdagent_conf_template is not defined )
   notify:

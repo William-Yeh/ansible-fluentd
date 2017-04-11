@@ -18,3 +18,5 @@
 #---- the following vars are handled in tasks/set-role-variables.yml ------
 
 #tdagent_use_service:       True      # use "service" command to start/restart fluentd?
+
+tdadent_setup_conf: True   # Setup td-agent configuration post installation.

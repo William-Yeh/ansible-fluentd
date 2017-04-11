@@ -29,7 +29,7 @@
 
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
-
+  when: tdagent_setup_conf
 
 
 - name: copy new td-agent.conf from role's default
@@ -38,7 +38,11 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
-  when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
+  when: >
+    ( tdagent_setup_conf )
+    and ( tdagent_setup_conf )
+    and ( tdagent_conf_copy is not defined )
+    and ( tdagent_conf_template is not defined )
   notify:
     - reload td-agent
 
@@ -48,7 +52,9 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
-  when: tdagent_conf_copy is defined
+  when: >
+    ( tdagent_setup_conf )
+    and ( tdagent_conf_copy is defined )
   notify:
     - reload td-agent
 
@@ -58,7 +64,9 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
-  when: tdagent_conf_template is defined
+  when: >
+    ( tdagent_setup_conf )
+    and ( tdagent_conf_template is defined )
   notify:
     - reload td-agent
 
@@ -69,6 +77,7 @@
     owner: td-agent
     group: td-agent
   with_dict: '{{ tdagent_conf_others | default({}) }}'
+  when: tdagent_setup_conf
   notify:
     - reload td-agent
 

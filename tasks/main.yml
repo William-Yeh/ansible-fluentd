@@ -77,7 +77,7 @@
     create: yes
     dest: /etc/logrotate.d/td-agent
     content: |
-    /var/log/td-agent/td-agent.log {
+      /var/log/td-agent/td-agent.log {
       size 100M
       rotate 5
       compress
@@ -90,7 +90,7 @@
         pid=/var/run/td-agent/td-agent.pid
         test -s $pid && kill -USR1 "$(cat $pid)"
       endscript
-    }   
+      }   
 
 
 # GEM installed on:

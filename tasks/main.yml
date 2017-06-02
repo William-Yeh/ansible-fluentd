@@ -72,7 +72,25 @@
   notify:
     - reload td-agent
 
-
+- name: replace default /etc/logrotate.d/td-agent with custom
+  blockinfile:
+    create: yes
+    dest: /etc/logrotate.d/td-agent
+    content: |
+    /var/log/td-agent/td-agent.log {
+      size 100M
+      rotate 5
+      compress
+      notifempty
+      create 640 td-agent td-agent
+      sharedscripts
+      dateext
+      dateformat -%Y%m%d-%s
+      postrotate
+        pid=/var/run/td-agent/td-agent.pid
+        test -s $pid && kill -USR1 "$(cat $pid)"
+      endscript
+    }   
 
 
 # GEM installed on:

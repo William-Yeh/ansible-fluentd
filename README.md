@@ -1,5 +1,5 @@
 
-williamyeh.fluentd for Ansible Galaxy
+Ansible Role: fluentd
 ============
 
 
@@ -7,8 +7,6 @@ williamyeh.fluentd for Ansible Galaxy
 
 
 ## Summary
-
-Role name in Ansible Galaxy: **[williamyeh.fluentd](https://galaxy.ansible.com/williamyeh/fluentd/)**
 
 This Ansible role has the following features for [Fluentd](http://www.fluentd.org/):
 
@@ -169,9 +167,3 @@ None.
 
 Licensed under the MIT License. See the [LICENSE file](LICENSE) for details.
 
-
-## History
-
-Modified from my Dockerized Fluentd app:
-
-  - [williamyeh/fluentd](https://github.com/William-Yeh/docker-fluentd)

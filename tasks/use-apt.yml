@@ -12,9 +12,10 @@
   with_items:
     - python-software-properties
     - apt-transport-https
-
+  
+  # apt_key stops working
 - name: add APT signing key for td-agent
-  apt_key: url=https://packages.treasuredata.com/GPG-KEY-td-agent state=present
+  shell: curl https://packages.treasuredata.com/GPG-KEY-td-agent | apt-key add -
 
 - name: add td-agent repository
   apt_repository: repo='deb https://packages.treasuredata.com/2/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}/ {{ ansible_distribution_release|lower }} contrib' state=present

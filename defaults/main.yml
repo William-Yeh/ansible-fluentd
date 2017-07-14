@@ -1,3 +1,6 @@
 ---
 
 tdagent_major_version: 2
+
+# cleanup old plugins and configs
+td-agent_do_cleanup_old: yes

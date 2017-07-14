@@ -23,6 +23,13 @@
     owner: td-agent
     group: td-agent
 
+- name: cleanup old configs and plugins
+  shell: rm -r {{item}}
+  with_items:
+    - /etc/td-agent/conf.d/
+    - /etc/td-agent/plugin/
+  when: td-agent_do_cleanup_old
+
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
 

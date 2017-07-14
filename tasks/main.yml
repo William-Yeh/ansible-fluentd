@@ -18,10 +18,13 @@
 
 - name: mkdir for conf.d
   file:
-    path: /etc/td-agent/conf.d
+    path: {{item}}
     state: directory
     owner: td-agent
     group: td-agent
+  with_items: 
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin/
 
 - name: cleanup old configs and plugins
   shell: rm -r {{item}}

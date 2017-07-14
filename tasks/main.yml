@@ -16,22 +16,24 @@
   include: use-yum.yml
   when: ansible_pkg_mgr == "yum"
 
+- name: cleanup old configs and plugins
+  file:
+    state: absent
+    path: "{{ item }}/"
+  with_items:
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin
+  when: td-agent_do_cleanup_old
+
 - name: mkdir for conf.d
   file:
-    path: {{item}}
+    path: "{{item}}"
     state: directory
     owner: td-agent
     group: td-agent
-  with_items: 
-    - /etc/td-agent/conf.d
-    - /etc/td-agent/plugin/
-
-- name: cleanup old configs and plugins
-  shell: rm -r {{item}}
   with_items:
-    - /etc/td-agent/conf.d/
-    - /etc/td-agent/plugin/
-  when: td-agent_do_cleanup_old
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin
 
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak

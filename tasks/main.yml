@@ -8,7 +8,6 @@
 - name: set role variables, if necessary
   include: set-role-variables.yml
 
-
 - name: delegate to APT system for installation
   include: use-apt.yml
   when: ansible_pkg_mgr == "apt"
@@ -16,9 +15,6 @@
 - name: delegate to YUM system for installation
   include: use-yum.yml
   when: ansible_pkg_mgr == "yum"
-
-
-
 
 - name: mkdir for conf.d
   file:
@@ -29,8 +25,6 @@
 
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
-
-
 
 - name: copy new td-agent.conf from role's default
   copy:
@@ -90,8 +84,7 @@
         pid=/var/run/td-agent/td-agent.pid
         test -s $pid && kill -USR1 "$(cat $pid)"
       endscript
-      }   
-
+      }
 
 # GEM installed on:
 #   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
@@ -105,7 +98,6 @@
   notify:
     - restart td-agent
 
-
 - name: install plugins with specified versions, if any
   gem:
       name: "{{ item.value.name }}"
@@ -116,4 +108,3 @@
   with_dict: "{{ tdagent_plugins_versions | default({}) }}"
   notify:
     - restart td-agent
-

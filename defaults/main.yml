@@ -1,20 +1,3 @@
 ---
 
-#
-# variables needed to be defined in user's playbook
-#
-
-
-
-
-#
-# user-configurable defaults
-#
-
-
-#tdagent_version
-
-
-#---- the following vars are handled in tasks/set-role-variables.yml ------
-
-#tdagent_use_service:       True      # use "service" command to start/restart fluentd?
+tdagent_major_version: 2

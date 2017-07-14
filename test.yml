@@ -26,7 +26,6 @@
         name: fluent-plugin-flowcounter
         version: 0.4.1
 
-
     tdagent_conf_copy: "files/td-agent.conf"
 
     tdagent_conf_others:

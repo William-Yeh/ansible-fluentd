@@ -1,1 +1,9 @@
-.vagrant
+*.swp
+*.swo
+*.idea
+*.swp
+*.swo
+*.idea
+.molecule
+.cache
+**__pycache__**

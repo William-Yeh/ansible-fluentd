@@ -1,0 +1,8 @@
+---
+fluentd_dependencies:
+  - libselinux-python
+
+fluentd_plugins_dependencies:
+  - gcc
+  - libcurl
+  - libcurl-devel

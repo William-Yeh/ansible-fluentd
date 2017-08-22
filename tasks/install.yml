@@ -1,0 +1,61 @@
+---
+- name: Install dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ fluentd_dependencies }}"
+
+- block:
+  - name: add APT signing key for td-agent
+    apt_key:
+      url: "https://packages.treasuredata.com/GPG-KEY-td-agent"
+      state: present
+
+  - name: add td-agent repository
+    apt_repository:
+      repo: "deb https://packages.treasuredata.com/2/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}/ {{ ansible_distribution_release|lower }} contrib"
+      state: present
+  when: ansible_pkg_mgr == "apt"
+
+- block:
+  - name: add GPG key from Treasure Data, Inc
+    # command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+    rpm_key:
+      key: https://packages.treasuredata.com/GPG-KEY-td-agent
+      validate_certs: no
+      state: present
+
+  - name: add official repository
+    copy:
+      src: td-redhat.repo
+      dest: /etc/yum.repos.d/td.repo
+  when: ansible_pkg_mgr == "yum"
+
+- name: Install fluentd (td-agent)
+  package:
+    name: td-agent
+    update_cache: yes
+    state: present
+
+- name: Install plugins dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ fluentd_plugins_dependencies }}"
+
+- name: Ensure fluentd (td-agent) service is enabled and started
+  service:
+    name: td-agent
+    state: started
+    enabled: yes
+
+- name: install plugins, if any
+  gem:
+    name: "{{ item }}"
+#    executable: /opt/td-agent/embedded/bin/fluent-gem
+    executable: /usr/sbin/td-agent-gem
+    state: present
+    user_install: no
+  with_items: "{{ fluentd_plugins }}"
+  notify:
+    - restart td-agent

@@ -14,8 +14,8 @@
 
 
 - name: add GPG key from Treasure Data, Inc
-  command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
-#  rpm_key: key=https://packages.treasuredata.com/GPG-KEY-td-agent validate_certs=no state=present
+#  command: rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+  rpm_key: key=https://packages.treasuredata.com/GPG-KEY-td-agent validate_certs=no state=present
 
 - name: add official repository
   copy: src=../files/td.repo dest=/etc/yum.repos.d/td.repo

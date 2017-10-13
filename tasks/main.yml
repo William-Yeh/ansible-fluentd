@@ -6,15 +6,15 @@
 #
 
 - name: set role variables, if necessary
-  include: set-role-variables.yml
+  import_tasks: set-role-variables.yml
 
 
 - name: delegate to APT system for installation
-  include: use-apt.yml
+  import_tasks: use-apt.yml
   when: ansible_pkg_mgr == "apt"
 
 - name: delegate to YUM system for installation
-  include: use-yum.yml
+  import_tasks: use-yum.yml
   when: ansible_pkg_mgr == "yum"
 
 

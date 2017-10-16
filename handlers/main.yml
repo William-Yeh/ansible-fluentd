@@ -1,15 +1,15 @@
 ---
-# file: handlers/main.yml
-#
-
 - name: reload td-agent
-  service: name=td-agent state=reloaded
-  when: tdagent_use_service|bool
+  service:
+    name: td-agent
+    state: reloaded
 
 - name: restart td-agent
-  service: name=td-agent state=restarted
-  when: tdagent_use_service|bool
+  service:
+    name: td-agent
+    state: restarted
 
 - name: stop td-agent
-  service: name=td-agent state=stopped
-  when: tdagent_use_service|bool
+  service:
+    name: td-agent
+    state: stopped

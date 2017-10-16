@@ -1,0 +1,26 @@
+---
+- name: mkdir for conf.d
+  file:
+    path: /etc/td-agent/conf.d
+    state: directory
+    owner: td-agent
+    group: td-agent
+
+- name: copy new td-agent.conf from role's default
+  copy:
+    src: td-agent.conf
+    dest: /etc/td-agent/td-agent.conf
+    owner: td-agent
+    group: td-agent
+  notify:
+    - reload td-agent
+
+- name: copy other config files
+  template:
+    src:  "{{ item }}"
+    dest: "/etc/td-agent/conf.d/{{ item.split('/')[-1] }}"
+    owner: td-agent
+    group: td-agent
+  with_items: "{{ fluentd_additional_conf }}"
+  notify:
+    - reload td-agent

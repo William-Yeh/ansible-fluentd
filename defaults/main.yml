@@ -1,5 +1,7 @@
 ---
-
+apt_related:
+  - python-software-properties
+  - apt-transport-https
 #
 # variables needed to be defined in user's playbook
 #

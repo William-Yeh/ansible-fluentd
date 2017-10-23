@@ -7,11 +7,15 @@
 # @see http://toolbelt.treasuredata.com/sh/install-ubuntu-trusty-td-agent2.sh
 #
 
+- name: set package name on Debian 9
+  set_fact:
+    apt_related:
+      - python3-software-properties
+      - apt-transport-https
+
 - name: install apt-related binaries for Ansible to work
   apt: name={{ item }}  state=present update_cache=yes
-  with_items:
-    - python-software-properties
-    - apt-transport-https
+  with_items: "{{ apt_related }}"
 
 - name: add APT signing key for td-agent
   apt_key: url=https://packages.treasuredata.com/GPG-KEY-td-agent state=present

@@ -36,10 +36,6 @@
     - build-essential
   when: tdagent_plugins is defined or tdagent_plugins_versions is defined
 
-- name: set INIT status and start
-  service: name=td-agent state=started enabled=yes
-  when: tdagent_use_service|bool
-
 - name: set INIT status (SysV style)
   shell: update-rc.d td-agent defaults
   when: not tdagent_use_service|bool

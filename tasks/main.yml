@@ -4,6 +4,14 @@
 #
 # @see http://docs.treasuredata.com/articles/td-agent
 #
+- name: cleanup old configs and plugins
+  file:
+    state: absent
+    path: "{{ item }}/"
+  with_items:
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin
+  when: td-agent_do_cleanup_old
 
 - name: set role variables, if necessary
   include: set-role-variables.yml
@@ -15,15 +23,6 @@
 - name: delegate to YUM system for installation
   include: use-yum.yml
   when: ansible_pkg_mgr == "yum"
-
-- name: cleanup old configs and plugins
-  file:
-    state: absent
-    path: "{{ item }}/"
-  with_items:
-    - /etc/td-agent/conf.d
-    - /etc/td-agent/plugin
-  when: td-agent_do_cleanup_old
 
 - name: mkdir for conf.d
   file:
@@ -45,8 +44,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
-  notify:
-    - reload td-agent
 
 - name: copy new "td-agent.conf" verbatim from main playbook's
   copy:
@@ -55,8 +52,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_copy is defined
-  notify:
-    - reload td-agent
 
 - name: copy (from template) new "td-agent.conf" from main playbook's
   template:
@@ -65,8 +60,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_template is defined
-  notify:
-    - reload td-agent
 
 - name: copy other config files from playbook's, if any
   template:
@@ -75,8 +68,6 @@
     owner: td-agent
     group: td-agent
   with_dict: '{{ tdagent_conf_others | default({}) }}'
-  notify:
-    - reload td-agent
 
 - name: log rotation
   template: src=logrotate.j2 dest=/etc/logrotate.d/td-agent owner=root group=root mode=0644
@@ -90,8 +81,6 @@
       state: latest
       user_install: no
   with_items: "{{ tdagent_plugins | default([]) }}"
-  notify:
-    - restart td-agent
 
 - name: install plugins with specified versions, if any
   gem:
@@ -101,5 +90,7 @@
       version: "{{ item.value.version }}"
       user_install: no
   with_dict: "{{ tdagent_plugins_versions | default({}) }}"
-  notify:
-    - restart td-agent
+
+- name: set INIT status and start
+  service: name=td-agent state=started enabled=yes
+  when: tdagent_use_service|bool

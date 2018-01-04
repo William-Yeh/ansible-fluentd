@@ -26,6 +26,7 @@
     state: directory
     owner: td-agent
     group: td-agent
+    mode: "0700"
 
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
@@ -38,6 +39,7 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
+    mode: "0600"
   when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
   notify:
     - reload td-agent
@@ -48,6 +50,7 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
+    mode: "0600"
   when: tdagent_conf_copy is defined
   notify:
     - reload td-agent
@@ -58,6 +61,7 @@
     dest: /etc/td-agent/td-agent.conf
     owner: td-agent
     group: td-agent
+    mode: "0600"
   when: tdagent_conf_template is defined
   notify:
     - reload td-agent
@@ -68,6 +72,7 @@
     dest: "/etc/td-agent/conf.d/{{ item.value.dest }}"
     owner: td-agent
     group: td-agent
+    mode: "0600"
   with_dict: '{{ tdagent_conf_others | default({}) }}'
   notify:
     - reload td-agent

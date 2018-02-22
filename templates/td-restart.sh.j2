@@ -2,10 +2,16 @@
 # Restart td-agent the hard way
 
 # stop
+service monit stop
 service td-agent stop
 sleep 5
+
 # make sure it stopped
 ps aux | grep td-agent | cut -d' ' -f2 | xargs -r kill -9
+
 # start
 service td-agent start
-exit $?
+started=$?
+service monit start
+
+exit ${started}

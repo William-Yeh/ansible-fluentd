@@ -11,7 +11,7 @@
   with_items:
     - /etc/td-agent/conf.d
     - /etc/td-agent/plugin
-  when: td-agent_do_cleanup_old
+  when: tdagent_do_cleanup_old
 
 - name: set role variables, if necessary
   include: set-role-variables.yml

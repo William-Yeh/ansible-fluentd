@@ -13,11 +13,12 @@
     - python-software-properties
     - apt-transport-https
 
+  # apt_key stops working
 - name: add APT signing key for td-agent
-  apt_key: url=https://packages.treasuredata.com/GPG-KEY-td-agent state=present
+  shell: curl https://packages.treasuredata.com/GPG-KEY-td-agent | apt-key add -
 
 - name: add td-agent repository
-  apt_repository: repo='deb https://packages.treasuredata.com/2/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}/ {{ ansible_distribution_release|lower }} contrib' state=present
+  apt_repository: repo='deb https://packages.treasuredata.com/{{ tdagent_major_version }}/{{ ansible_distribution|lower }}/{{ ansible_distribution_release|lower }}/ {{ ansible_distribution_release|lower }} contrib' state=present
 
 
 - name: install td-agent
@@ -28,20 +29,12 @@
   apt: name="td-agent={{ tdagent_version }}*"  update_cache=yes  state=present force=yes
   when: tdagent_version is defined
 
-
-
 - name: install libcurl and make for compiling plugins
   apt: name={{ item }}  state=present update_cache=yes
   with_items:
     - libcurl4-gnutls-dev
     - build-essential
   when: tdagent_plugins is defined or tdagent_plugins_versions is defined
-
-
-
-- name: set INIT status and start
-  service: name=td-agent state=started enabled=yes
-  when: tdagent_use_service|bool
 
 - name: set INIT status (SysV style)
   shell: update-rc.d td-agent defaults

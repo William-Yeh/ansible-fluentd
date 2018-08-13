@@ -1,0 +1,10 @@
+/var/log/td-agent/td-agent.log {
+  size 100M
+  rotate 5
+  compress
+  notifempty
+  copytruncate
+  create 640 td-agent td-agent
+  dateext
+  dateformat -%Y%m%d-%s
+}

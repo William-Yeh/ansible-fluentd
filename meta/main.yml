@@ -2,7 +2,7 @@
 # meta/main.yml
 
 galaxy_info:
-    author: williamyeh
+    author: verygood-ops
     description: Install Fluentd (td-agent version)
     license: MIT
     min_ansible_version: 1.8

@@ -4,10 +4,17 @@
 #
 # @see http://docs.treasuredata.com/articles/td-agent
 #
+- name: cleanup old configs and plugins
+  file:
+    state: absent
+    path: "{{ item }}/"
+  with_items:
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin
+  when: tdagent_do_cleanup_old
 
 - name: set role variables, if necessary
   include: set-role-variables.yml
-
 
 - name: delegate to APT system for installation
   include: use-apt.yml
@@ -17,20 +24,18 @@
   include: use-yum.yml
   when: ansible_pkg_mgr == "yum"
 
-
-
-
 - name: mkdir for conf.d
   file:
-    path: /etc/td-agent/conf.d
+    path: "{{item}}"
     state: directory
     owner: td-agent
     group: td-agent
+  with_items:
+    - /etc/td-agent/conf.d
+    - /etc/td-agent/plugin
 
 - name: rename default td-agent.conf
   command: creates="/etc/td-agent/td-agent.conf.bak" mv /etc/td-agent/td-agent.conf /etc/td-agent/td-agent.conf.bak
-
-
 
 - name: copy new td-agent.conf from role's default
   copy:
@@ -39,8 +44,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_copy is not defined and tdagent_conf_template is not defined
-  notify:
-    - reload td-agent
 
 - name: copy new "td-agent.conf" verbatim from main playbook's
   copy:
@@ -49,8 +52,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_copy is defined
-  notify:
-    - reload td-agent
 
 - name: copy (from template) new "td-agent.conf" from main playbook's
   template:
@@ -59,8 +60,6 @@
     owner: td-agent
     group: td-agent
   when: tdagent_conf_template is defined
-  notify:
-    - reload td-agent
 
 - name: copy other config files from playbook's, if any
   template:
@@ -69,11 +68,12 @@
     owner: td-agent
     group: td-agent
   with_dict: '{{ tdagent_conf_others | default({}) }}'
-  notify:
-    - reload td-agent
 
+- name: copy td-restart script
+  template: src=td-restart.sh.j2 dest=/bin/td-restart.sh owner=root group=root mode=0744
 
-
+- name: log rotation
+  template: src=logrotate.j2 dest=/etc/logrotate.d/td-agent owner=root group=root mode=0644
 
 # GEM installed on:
 #   /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/
@@ -84,9 +84,6 @@
       state: latest
       user_install: no
   with_items: "{{ tdagent_plugins | default([]) }}"
-  notify:
-    - restart td-agent
-
 
 - name: install plugins with specified versions, if any
   gem:
@@ -96,6 +93,12 @@
       version: "{{ item.value.version }}"
       user_install: no
   with_dict: "{{ tdagent_plugins_versions | default({}) }}"
-  notify:
-    - restart td-agent
 
+- name: disable sqs checksum check if sqs plugin present
+  shell: 'sed -i "s/true,/false,/" /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/aws-sdk-v1-*/lib/aws/sqs/config.rb'
+  with_dict: "{{ tdagent_plugins_versions | default({}) }}"
+  when: item.value.name == 'fluent-plugin-sqs'
+
+- name: set INIT status and start
+  service: name=td-agent state=started enabled=yes
+  when: tdagent_use_service|bool

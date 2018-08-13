@@ -94,6 +94,11 @@
       user_install: no
   with_dict: "{{ tdagent_plugins_versions | default({}) }}"
 
+- name: disable sqs checksum check if sqs plugin present
+  shell: 'sed -i "s/true,/false,/" /opt/td-agent/embedded/lib/ruby/gems/2.1.0/gems/aws-sdk-v1-*/lib/aws/sqs/config.rb'
+  with_dict: "{{ tdagent_plugins_versions | default({}) }}"
+  when: item.value.name == 'fluent-plugin-sqs'
+
 - name: set INIT status and start
   service: name=td-agent state=started enabled=yes
   when: tdagent_use_service|bool
